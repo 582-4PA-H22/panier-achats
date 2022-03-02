@@ -3,6 +3,9 @@ import Entete from './Entete';
 import PiedPage from './PiedPage';
 import ListeProduits from './ListeProduits';
 import {useEffect, useState} from 'react';
+import {Routes, Route} from 'react-router-dom';
+import Accueil from './Accueil';
+import Histoire from './Histoire';
 
 function App() {
   // État React pour gérer un panier d'achats
@@ -10,32 +13,23 @@ function App() {
   // Remarquez que useState retourne un tableau : 
   // Le premier élément du tableau représente le contenu de l'état
   const panier = etatPanier[0]; 
-  // Le deuxième élément est une fonction qui sert à réécrire l'état
-  // const setPanier = etatPanier[1]; 
-  // Donc, alternativement avec destructuration de tableau
-  // const [panier, setPanier] = useState({});
 
-  // État React pour gérer un compteur de clics
-  // Remarquez la syntaxe JS de "déstructuration" de tableau : on obtient 
-  // rapidement deux variables contenant les deux éléments du tableau retourné 
-  // par useState()
-  const [compteur, setCompteur] = useState(0); 
 
   // "Persister" (sauvegarder) le panier dans localStorage
   // Utiliser le HOOK useEffect pour exécuter ce code de façon controlée
-  
   useEffect(() => window.localStorage.setItem('panier-4pa', JSON.stringify(panier)), [panier]);
-
-  
 
   return (
     <div className="App">
       <Entete ali="baba" panier={panier} test="Allo Props" />
-      <ListeProduits etatPanier={etatPanier} />
-      <div>
-        <span>Nombre de clics : {compteur} </span>
-        <button onClick={() => {setCompteur(compteur+1); console.log('Compteur des clics : ', compteur);}}>Cliquez-moi</button>
-      </div>
+      
+      {/* Routes spécifiques à chaque composant */}
+      <Routes>
+        <Route path='/' element={<Accueil/>}/>
+        <Route path='/notre-histoire' element={<Histoire/>}/>
+        <Route path='/nos-produits' element={<ListeProduits etatPanier={etatPanier} />}/>
+      </Routes>
+
       <PiedPage />
     </div>
   );
