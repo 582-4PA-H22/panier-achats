@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div className="App">
-      <Entete ali="baba" panier={panier} test="Allo Props" />
+      <Entete panier={panier} />
       
       {/* Routes spécifiques à chaque composant */}
       <Routes>
