@@ -6,16 +6,16 @@ import {useEffect, useState} from 'react';
 import {Routes, Route} from 'react-router-dom';
 import Accueil from './Accueil';
 import Histoire from './Histoire';
+import { authFirebase, authGoogle } from './firebase/init';
+import { signInWithPopup, onAuthStateChanged } from "firebase/auth";
+
 
 function App() {
   // État React pour gérer un panier d'achats
   const etatPanier = useState(() => JSON.parse(window.localStorage.getItem('panier-4pa')) || {});
-  // Remarquez que useState retourne un tableau : 
-  // Le premier élément du tableau représente le contenu de l'état
   const panier = etatPanier[0]; 
 
   // "Persister" (sauvegarder) le panier dans localStorage
-  // Utiliser le HOOK useEffect pour exécuter ce code de façon controlée
   useEffect(() => window.localStorage.setItem('panier-4pa', JSON.stringify(panier)), [panier]);
 
   // État de l'utilisateur connecté
@@ -25,8 +25,14 @@ function App() {
    * Déclenche le processus d'authentification avec Google Auth Provider
    */
   function connexion() {
-    
+    signInWithPopup(authFirebase, authGoogle).then(
+      objUserGoogle => setUtil(objUserGoogle.user)
+    );
   }
+
+  // Attacher un "observateur" de changement d'état de connexion (gestionnaire 
+  // d'événement de Firebase Authentication)
+  useEffect(()=>onAuthStateChanged(authFirebase, user => setUtil(user)), []);
 
   return (
     <div className="App">
